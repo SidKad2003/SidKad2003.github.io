@@ -1,0 +1,65 @@
+logo:
+  # avatar: '[<img no-lazy src="/assets/Sidkad.svg" height="55px" />](/)'
+  title: '[<img no-lazy src="/assets/Sidkad.svg" height="55px" />](/)' # Optional — set a custom title or leave as is
+  subtitle: 'Tech | Tinkering'   # Optional — shown on hover
+# Sidebar main function navigation menu 
+# Article search 
+search:
+  service: local_search  # Use built-in search
+  local_search:
+    field: all           # 'post', 'page', or 'all'
+    path: /search.json   # Default search index path
+    content: true        # Include full content in search
+    skip_search:         # Optional: exclude paths
+      - about*
+      - post/2023*
+    codeblock: true      # Include code blocks in search
+
+menubar:
+  columns: 4  # Number of items per row
+  items:
+    - id: blog
+      theme: '#1BCDFC'
+      icon: solar:documents-bold-duotone
+      title: Blog
+      url: /
+
+    - id: wiki
+      theme: '#3DC550'
+      icon: solar:notebook-bookmark-bold-duotone
+      title: Wiki
+      url: /wiki/
+
+    - id: explore
+      theme: '#FA6400'
+      icon: solar:planet-bold-duotone
+      title: Explore
+      url: /explore/
+
+    - id: social
+      theme: '#F44336'
+      icon: solar:chat-square-like-bold-duotone
+      title: Social
+      url: /friends/
+leftbar:
+  background-image: url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.13/image/sidebar-bg1@small.jpg)
+  blur-px: 100px
+  blur-bg: var(--bg-a60)
+
+footer:
+  social:
+    github:
+      icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/08a41b181ce68.svg"/>'
+      url: https://github.com/
+
+    music:
+      icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/3845874.svg"/>'
+      url: https://example.com/music
+
+    unsplash:
+      icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/3616429.svg"/>'
+      url: https://unsplash.com/
+
+    comments:
+      icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/942ebbf1a4b91.svg"/>'
+      url: https://example.com/comments
