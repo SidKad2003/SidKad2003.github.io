@@ -205,9 +205,9 @@ The curvature parameter $\varphi_t$ determines the **steepness** and **curvature
 - Here, $\eta$ and $\gamma$ are themselves modeled as **linear functions of time**:
 
 $$
-\begin{align}
+\begin{aligned}
 \eta = A_\eta t + B_\eta, \quad \gamma = A_\gamma t + B_\gamma
-\end{align}
+\end{aligned}
 $$
 
 This form provides the flexibility to shape the smile appropriately across maturities. The combination of $\rho_t$ and $\varphi_t$ enables the model to reproduce both the skew and the smile seen in market data.
@@ -252,13 +252,14 @@ These ensure the surface is consistent **across maturities**, i.e., there's **no
 - **Why it matters:** Ensures the **overall steepness** of the volatility smile doesn't drop as maturity increases. Prevents arbitrage from crossing maturity slices.
 
 ##### 7. Slope continuity condition between maturities:
-
+<div style="overflow-x: auto;">
 $$
-\begin{align}
+\begin{aligned}
 \left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad 
 \text{(when } \psi_{i+1} \ne \psi_i \text{)}
-\end{align}
+\end{aligned}
 $$
+</div>
 - **Type:** Calendar
 - **Why it matters:** Limits how quickly the slope of the smile (controlled by \( \rho \psi \)) can change between adjacent maturities. Sudden changes would imply **time arbitrage**, e.g., a butterfly that gains by switching maturities.
 
