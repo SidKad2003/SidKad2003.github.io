@@ -65,6 +65,6 @@ footer:
     comments:
       icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/942ebbf1a4b91.svg"/>'
       url: https://example.com/comments
+  license: ""
   content: |
     Made with Ambition, Pride and Joy by Siddharth Kaduskar Using Hexo.Stellar
-  license: ""
