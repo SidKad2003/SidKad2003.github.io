@@ -255,9 +255,10 @@ These ensure the surface is consistent **across maturities**, i.e., there's **no
 
 $$
 \begin{align}
-\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad \text{(when } \psi_{i+1} \ne \psi_i \text{)}
-$$
+\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad 
+\text{(when } \psi_{i+1} \ne \psi_i \text{)}
 \end{align}
+$$
 - **Type:** Calendar
 - **Why it matters:** Limits how quickly the slope of the smile (controlled by \( \rho \psi \)) can change between adjacent maturities. Sudden changes would imply **time arbitrage**, e.g., a butterfly that gains by switching maturities.
 
