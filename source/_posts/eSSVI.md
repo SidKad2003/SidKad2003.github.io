@@ -126,7 +126,7 @@ Based on the understanding from such stochastic volatility models, researchers d
 # eSSVI
 The elegance of the eSSVI model lies in its ability to capture the full implied volatility surface with just a few parameters, while staying arbitrage-free. But implementing it in practice is far from plug-and-play.
 
-In this section, I break down the inner mechanics of eSSVI — from what each parameter does, to how the surface is calibrated as an optimization problem. I also dive into the errors I faced during implementation, what caused them, and how I fixed them.
+In this section, I break down the inner mechanics of **Power style** eSSVI — from what each parameter does, to how the surface is calibrated as an optimization problem. I also dive into the errors I faced during implementation, what caused them, and how I fixed them.
 
 This is where theory meets reality.
 ## 1. Understanding the eSSVI Parametrization
@@ -247,7 +247,7 @@ These ensure the surface is consistent **across maturities**, i.e., there's **no
 - **Type:** Calendar
 - **Why it matters:** The ATM total variance should grow with maturity — declining variance implies the market expects less uncertainty further out, which contradicts financial intuition.
 
-##### 6. $\psi(\theta_t) = \eta \theta_t^\gamma$ must be non-decreasing in $t$
+##### 6. $\psi(\theta_t)$ must be non-decreasing in $t$
 - **Type:** Calendar
 - **Why it matters:** Ensures the **overall steepness** of the volatility smile doesn't drop as maturity increases. Prevents arbitrage from crossing maturity slices.
 
