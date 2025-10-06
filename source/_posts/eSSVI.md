@@ -99,11 +99,11 @@ Running this for many simulated paths (e.g., 10,000) gives a **Distribution** of
 Each path is random, but the **Statistical Structure** across all paths reflects the model’s behavior.
 ### Step 2–4: Calibration and Comparison to Market
 
-For each path, compute the option payoff: $ // C_i = e^{-rT} \max(S_T^{(i)} - K, 0)$
+For each path, compute the option payoff: $  C_i = e^{-rT} \max(S_T^{(i)} - K, 0)$
 
-The model price is the expected value: $ // C_{\text{model}} = \frac{1}{M}\sum_{i=1}^{M} C_i$
+The model price is the expected value: $  C_{\text{model}} = \frac{1}{M}\sum_{i=1}^{M} C_i$
 
-Calibration adjusts parameters $\((\kappa, \theta, \xi, \rho, V_0)\)$ to minimize the total squared error versus market option prices:
+Calibration adjusts parameters $(\kappa, \theta, \xi, \rho, V_0)$ to minimize the total squared error versus market option prices:
 $$\min_{\text{params}} \sum_{i,j} \left[C_{\text{model}}(K_i, T_j) - C_{\text{mkt}}(K_i, T_j)\right]^2$$
 
 Typical optimizers include **BFGS**, **L-BFGS-B**, or global methods like **Differential Evolution**.
