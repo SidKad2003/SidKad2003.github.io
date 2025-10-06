@@ -63,6 +63,5 @@ footer:
     comments:
       icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/942ebbf1a4b91.svg"/>'
       url: https://example.com/comments
-footer:
   since: 2020
   custom_text: "Powered by Hexo & Stellar"
