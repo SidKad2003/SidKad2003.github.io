@@ -124,17 +124,25 @@ As a result the Heston model helped researchers understand phenomena such as ske
 
 Based on the understanding from such stochastic volatility models, researchers developed parametric models like SVI and later eSSVI to directly parametrize and fit the observed implied volatility surface. These models make calibration more efficient and ensure no-arbitrage constraints while preserving the realistic shapes (smile, skew, term structure) originally explored by models such as Heston. Thus, SSVI and eSSVI was built as a natural evolution to efficiently capture the structure that stochastic volatility models helped uncover.
 # 3. eSSVI
+The elegance of the eSSVI model lies in its ability to capture the full implied volatility surface with just a few parameters, while staying arbitrage-free. But implementing it in practice is far from plug-and-play.
+
+In this section, I break down the inner mechanics of eSSVI — from what each parameter does, to how the surface is calibrated as an optimization problem. I also dive into the errors I faced during implementation, what caused them, and how I fixed them.
+
+This is where theory meets reality.
 ## Understanding the eSSVI Parametrization
 
 The eSSVI model defines the **implied total variance** surface \( w(k, t) \), which is the squared implied volatility multiplied by maturity. Its formulation is:
 <div style="overflow-x: auto;">
+
 $$
 \begin{aligned}
 w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\} 
 \end{aligned}
 $$
+
 </div>
-### What Each Symbol Means:
+
+### What Each Symbol Means
 
 | Symbol | Meaning |
 |--------|---------|
