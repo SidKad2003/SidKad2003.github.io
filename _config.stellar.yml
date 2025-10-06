@@ -66,12 +66,4 @@ footer:
       icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/942ebbf1a4b91.svg"/>'
       url: https://example.com/comments
   content: |
-    # Support Markdown format
-    This site is used by [{ author.name }] (/) [{ theme.name } { theme.version }] ({theme.tree}) Theme creation.
-    Unless otherwise stated, all articles in this blog adopt the [ CC BY-NC-SA 4.0 ] (https://creativecommons.org/licenses/by-nc-sa/4.0/) license agreement. Please indicate the source when reprinting.
-
-    <span class="jinrishici-sentence"></span>
-    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
-
-    # The more users a theme has, the more motivated the developer will be to maintain and update it.
-    If you like this theme, please display the theme information and repository link in the appropriate place to show your support.
+    Made with Ambition, Pride and Joy by Siddharth Kaduskar Using Hexo.Stellary link in the appropriate place to show your support.
