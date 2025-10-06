@@ -293,6 +293,21 @@ def total_variance(self, x, tind, kind):
     term = phi * k_val + rho
     val = max(term**2 + (1 - rho**2), 1e-10)
     return theta_val / 2 * (1 + rho * phi * k_val + np.sqrt(val))
+```
+Whereas the Parameters were calculated as, where X is the array of parameters to be optimized.
+```python
+def _compute_parameters(self, x, T_val):
+    raw_rho = x[0] + x[1] * T_val
+    rho = raw_rho  # Can be clipped later if needed
+
+    if self._type == 'Heston':
+        lam = x[2] + x[3] * T_val
+        return rho, lam, None
+    elif self._type == 'Power':
+        eta = x[2] + x[3] * T_val
+        gamma = x[4] + x[5] * T_val
+        return rho, eta, gamma
+```
 
 ## 2. Optimization and Forensic
 Now that the structure and intuition are clear, let’s look at what actually broke when I tried to implement this — and how I diagnosed and fixed each issue.
