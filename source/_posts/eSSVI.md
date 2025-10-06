@@ -287,6 +287,7 @@ Calibrating eSSVI isn’t just curve fitting — it creates a **nonlinear, const
 #### 1. Nonlinear
 
 - The eSSVI formula involves **products, powers, and square roots**:
+<div style="overflow-x: auto;">
   
   $$
   \begin{aligned}
@@ -294,7 +295,7 @@ Calibrating eSSVI isn’t just curve fitting — it creates a **nonlinear, const
   \end{aligned}
   $$
 - Calibration minimizes the difference between **model and market total variances**, making the objective **nonlinear** in parameters. Both the model and loss function are nonlinear.
-
+<\div>
 ---
 
 #### 2. Constrained
@@ -322,7 +323,93 @@ Calibrating eSSVI isn’t just curve fitting — it creates a **nonlinear, const
 ---
 ### How to solve such problem?
 
+Since most real-world nonlinear, constrained, and nonconvex optimization problems do not have closed-form solutions, **eSSVI calibration is no exception**. Its objective function — often based on squared errors between model and market implied variances — is nonlinear and behaves irregularly across parameter space.
 
+This necessitates the use of **iterative numerical optimization methods** to approximate a feasible and near-optimal solution. Attempts to convert eSSVI into a convex or closed-form compatible formulation are generally impractical due to the model’s structural complexity.
+
+Like any other optimization problem, solving eSSVI calibration involves two key steps:
+- **Finding a feasible region** — a set of parameter values that satisfy all arbitrage constraints.
+- **Optimizing within that region** — identifying parameter values that best minimize the calibration error.
+
+One effective method used for this is **Sequential Least Squares Quadratic Programming (SLSQP)**, which handles both nonlinear objectives and constraints.
+
+#### Mathematical Formulation of SLSQP (Sequential Least Squares Quadratic Programming)
+
+**SLSQP** is an iterative method for solving **nonlinear constrained optimization problems**. It is particularly useful when both the objective function and the constraints are nonlinear.
+
+##### 🎯 Problem Setup
+
+SLSQP solves problems of the following general form:
+
+<div style="overflow-x: auto;">
+$$
+\begin{aligned}
+\min_{x \in \mathbb{R}^n} &\quad f(x) \\\\
+\text{subject to} &\quad g_j(x) = 0, \quad j = 1, \dots, m_e \\\\
+&\quad h_k(x) \geq 0, \quad k = 1, \dots, m_i
+\end{aligned}
+$$
+<\div>
+
+Where:
+- $f(x)$ is the **nonlinear objective function** to minimize.
+- $g_j(x)$ are **nonlinear equality constraints**.
+- $h_k(x)$ are **nonlinear inequality constraints**.
+
+---
+
+##### Core Idea
+
+At each iteration $k$, SLSQP solves a **Quadratic Programming (QP)** subproblem that approximates the original problem locally.
+
+#### QP Subproblem: Approximated Objective
+
+A **quadratic model of the Lagrangian** is used:$\min_{d \in \mathbb{R}^n} \quad \frac{1}{2} d^T B_k d + \nabla f(x_k)^T d$
+
+Where:
+- $d$ is the search direction.
+- $B_k$ approximates the **Hessian** of the Lagrangian using quasi-Newton updates (e.g., BFGS).
+- $\nabla f(x_k)$ is the **gradient** of the objective at current iterate $x_k$.
+
+##### Linearized Constraints
+
+Constraints are linearized around the current point:
+<div style="overflow-x: auto;">
+
+$$
+\begin{aligned}
+\nabla g_j(x_k)^T d + g_j(x_k) &= 0, \quad j = 1, \dots, m_e \\\\
+\nabla h_k(x_k)^T d + h_k(x_k) &\geq 0, \quad k = 1, \dots, m_i
+\end{aligned}
+$$
+<\div>
+This converts the nonlinear constraints into a **local linear approximation**, making the QP solvable at each iteration.
+
+##### Update Step
+
+Once the direction $d_k$ is found, the solution is updated:$x_{k+1} = x_k + \alpha_k d_k$
+
+Where $\alpha_k \in (0, 1]$ is chosen via a **line search** to ensure:
+- Feasibility is preserved,
+- Sufficient reduction in the objective.
+
+##### Multiplier Update
+
+Lagrange multipliers (dual variables) are updated using the QP solution.
+
+---
+
+#### Intuition Behind SLSQP
+
+- SLSQP transforms a complex **nonlinear constrained problem** into a sequence of **simpler quadratic subproblems**.
+- Constraints are **locally linearized**, making them easier to handle.
+- The **Hessian approximation** ($B_k$) gives curvature information, making it faster than purely gradient-based methods.
+- The algorithm balances:
+  - **Feasibility** (satisfying constraints),
+  - **Optimality** (minimizing the objective),
+  - Using **merit functions and line search** to avoid divergence.
+
+---
 
 
 
