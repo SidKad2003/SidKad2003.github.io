@@ -519,7 +519,7 @@ The table below summarizes the primary errors I encountered and what they reveal
 |:------------------|:------------|:---------|
 | **8 – Positive Directional Derivative** | Flat or ill-conditioned objective; poor initialization; parameter overflow | The optimizer couldn’t find a descent direction — a symptom of eSSVI’s rugged, non-convex loss surface. |
 | **5 – Singular Matrix in LSQ** | Numerical breakdown when $\rho > 1$ caused invalid $\sqrt{1 - \rho^2}$ terms | Even a small domain violation poisons the Hessian, showing how sensitive eSSVI is to boundary conditions. |
-| **4 – Constraints incompatible or cannot be satisfied** | Theoretical arbitrage condition $\eta(1 + |\rho|)^2$ became infeasible | Revealed how eSSVI’s feasible region is non-convex and tightly coupled across parameters. |
+| **4 – Constraints incompatible or cannot be satisfied** | Theoretical arbitrage condition $\eta(1 + |\rho|)>2$ became infeasible | Revealed how eSSVI’s feasible region is non-convex and tightly coupled across parameters. |
 | **Runtime Warnings** | Overflow in $\phi k + \rho$ or invalid $\sqrt{\cdot}$ terms | Signaled numerical instability and the need for clamping and tighter parameter bounds. |
 | **High Objective Values (~10⁶)** | Arbitrary initialization, exploding terms in $\phi = \eta \theta^{-\gamma}$ | Highlighted poor global convergence and the importance of structured initialization. |
 | **Gradient Ineffectiveness** | Autograd provided gradients, but they didn’t improve convergence | Gradient quality couldn’t overcome non-convexity or constraint infeasibility. |
