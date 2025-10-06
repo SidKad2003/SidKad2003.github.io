@@ -123,13 +123,13 @@ Hence, this process doesn’t predict exact future prices — it predicts the **
 As a result the Heston model helped researchers understand phenomena such as skew, smile, and the term structure of implied volatility by providing a stochastic volatility framework that explains these features more realistically than simpler models like Black-Scholes. It was among the first models able to capture these effects with a semi-analytical solution, making it useful for practical implementation.
 
 Based on the understanding from such stochastic volatility models, researchers developed parametric models like SVI and later eSSVI to directly parametrize and fit the observed implied volatility surface. These models make calibration more efficient and ensure no-arbitrage constraints while preserving the realistic shapes (smile, skew, term structure) originally explored by models such as Heston. Thus, SSVI and eSSVI was built as a natural evolution to efficiently capture the structure that stochastic volatility models helped uncover.
-# 3. eSSVI
+# eSSVI
 The elegance of the eSSVI model lies in its ability to capture the full implied volatility surface with just a few parameters, while staying arbitrage-free. But implementing it in practice is far from plug-and-play.
 
 In this section, I break down the inner mechanics of eSSVI — from what each parameter does, to how the surface is calibrated as an optimization problem. I also dive into the errors I faced during implementation, what caused them, and how I fixed them.
 
 This is where theory meets reality.
-## Understanding the eSSVI Parametrization
+## 1. Understanding the eSSVI Parametrization
 
 The eSSVI model defines the **implied total variance** surface \( w(k, t) \), which is the squared implied volatility multiplied by maturity. Its formulation is:
 
@@ -170,9 +170,10 @@ The symbol $\theta_t$ represents the total implied variance at-the-money (ATM) f
 - The 
 $$
 \begin{align}
-\frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}$$ term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
+\frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}$$
 \end{align}
 $$
+term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
 
 ---
 
@@ -200,7 +201,7 @@ The skew parameter $\rho_t$ controls the **asymmetry** of the implied volatility
 
 The curvature parameter $\varphi_t$ determines the **steepness** and **curvature** of the volatility smile beyond the ATM point. 
 - It is not directly calibrated, but is computed from: $\varphi_t = \eta \cdot (\rho_t)^{-\gamma}$. 
-- Here, \( \eta \) and \( \gamma \) are themselves modeled as **linear functions of time**:
+- Here, $\eta$ and $\gamma$ are themselves modeled as **linear functions of time**:
 
 $$
 \begin{align}
@@ -218,11 +219,9 @@ This form provides the flexibility to shape the smile appropriately across matur
 
 % The full eSSVI formula adjusts the ATM total variance $\theta_t$ into a surface that varies with strike (via $k$): 
 
-% $$
 % \begin{align}
 % w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}
 % \end{align}
-% $$
 
 % - The **linear term** $\rho_t \varphi_t k$ introduces asymmetry.
 % - The **square root term** introduces smooth curvature, ensuring the surface bends around ATM.
