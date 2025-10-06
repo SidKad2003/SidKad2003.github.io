@@ -538,6 +538,7 @@ For me, the easiest way to understand what's happening was to **plot the paramet
     allowfullscreen>
   </iframe>
 </div>
+For me, the easiest way to understand what's happening was to **plot the parameter values as a function of** $t$ (time to expiry), in the form: $y = x \cdot m + c$
 
 ---
 
