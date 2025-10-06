@@ -141,6 +141,28 @@ w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t 
 $$
 </div>
 
+
+This is implemented in `total_variance()`:
+
+```python
+def total_variance(self, x, tind, kind):
+    expiry = self._T[tind]
+    k_val = self._k[expiry][kind]
+    theta_val = self._theta[expiry]
+    rho, p1, p2 = self._compute_parameters(x, expiry)
+
+    if self._type == 'Heston':
+        lam = p1
+        x_val = lam * theta_val
+        phi = (1 - np.exp(-x_val)) / x_val if x_val > 1e-5 else 1 - x_val / 2
+    elif self._type == 'Power':
+        eta, gamma = p1, p2
+        phi = eta * (theta_val ** -gamma)
+
+    term = phi * k_val + rho
+    val = max(term**2 + (1 - rho**2), 1e-10)
+    return theta_val / 2 * (1 + rho * phi * k_val + np.sqrt(val))
+```
 ### What Each Symbol Means
 
 | Symbol | Meaning |
@@ -213,6 +235,20 @@ $$
 This form provides the flexibility to shape the smile appropriately across maturities. The combination of $\rho_t$ and $\varphi_t$ enables the model to reproduce both the skew and the smile seen in market data.
 
 ---
+Parameters were calculated in `_compute_parameters()`, where X is the array of parameters to be optimized.
+```python
+def _compute_parameters(self, x, T_val):
+    raw_rho = x[0] + x[1] * T_val
+    rho = raw_rho  # Can be clipped later if needed
+
+    if self._type == 'Heston':
+        lam = x[2] + x[3] * T_val
+        return rho, lam, None
+    elif self._type == 'Power':
+        eta = x[2] + x[3] * T_val
+        gamma = x[4] + x[5] * T_val
+        return rho, eta, gamma
+```
 #### Arbitrage Constraints
 
 These constraints ensure the **convexity of the total variance smile** for each maturity slice — i.e., **no butterfly arbitrage**. Derived from the work of Gatheral & Jacquier, they apply per maturity:
@@ -273,41 +309,27 @@ $$
 
 Together, these constraints form the **arbitrage-free foundation** of the eSSVI volatility surface. Ignoring even one can result in a model that fits market data but allows arbitrage — defeating its practical use in pricing and risk management.
 
-This is implemented in `total_variance()`:
-
+The Constraints were embedded as follows:
 ```python
-def total_variance(self, x, tind, kind):
-    expiry = self._T[tind]
-    k_val = self._k[expiry][kind]
-    theta_val = self._theta[expiry]
-    rho, p1, p2 = self._compute_parameters(x, expiry)
+def _power_constraints(self, x):
+    constraints = []
+    phi_his = 0.0
+    for T_val in self._T_array:
+        rho, eta, gamma = self._compute_parameters(x, T_val)
+        phi = eta * (self._theta[T_val] ** -gamma)
 
-    if self._type == 'Heston':
-        lam = p1
-        x_val = lam * theta_val
-        phi = (1 - np.exp(-x_val)) / x_val if x_val > 1e-5 else 1 - x_val / 2
-    elif self._type == 'Power':
-        eta, gamma = p1, p2
-        phi = eta * (theta_val ** -gamma)
-
-    term = phi * k_val + rho
-    val = max(term**2 + (1 - rho**2), 1e-10)
-    return theta_val / 2 * (1 + rho * phi * k_val + np.sqrt(val))
+        constraints.extend([
+            1 - abs(rho) - 1e-5,       # |ρ| < 1
+            eta - 1e-5,                # η > 0
+            gamma + 0.99,              # γ > -0.99
+            0.99 - gamma,              # γ < 0.99
+            2 - eta * (1 + abs(rho)),  # η(1 + |ρ|) ≤ 2
+            phi - phi_his - 1e-5       # Monotonic φ_t
+        ])
+        phi_his = phi
+    return np.array(constraints)
 ```
-Whereas the Parameters were calculated as, where X is the array of parameters to be optimized.
-```python
-def _compute_parameters(self, x, T_val):
-    raw_rho = x[0] + x[1] * T_val
-    rho = raw_rho  # Can be clipped later if needed
-
-    if self._type == 'Heston':
-        lam = x[2] + x[3] * T_val
-        return rho, lam, None
-    elif self._type == 'Power':
-        eta = x[2] + x[3] * T_val
-        gamma = x[4] + x[5] * T_val
-        return rho, eta, gamma
-```
+This array would be fed to `minimize` as provided by `SciPy`
 
 ## 2. Optimization and Forensic
 Now that the structure and intuition are clear, let’s look at what actually broke when I tried to implement this — and how I diagnosed and fixed each issue.
@@ -390,6 +412,23 @@ Where:
 - $f(x)$ is the **nonlinear objective function** to minimize.
 - $g_j(x)$ are **nonlinear equality constraints**.
 - $h_k(x)$ are **nonlinear inequality constraints**.
+
+In our scenario, objective funtion looks something like:
+```python
+def objective_function(self, x):
+    sm = 0.0
+    for i, expiry in enumerate(self._T):
+        for j, strike in enumerate(self._K):
+            model_var = self.total_variance(x, i, j)
+            iv = self._iv.loc[expiry, strike]
+            if np.isnan(iv):
+                continue
+            market_var = iv ** 2 * expiry
+            weight = 1.0 if self._wgttype == 'none' else self.vega[expiry][j]
+            sm += weight * (model_var - market_var) ** 2
+    return sm
+```
+
 
 ---
 
