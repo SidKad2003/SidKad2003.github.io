@@ -170,9 +170,9 @@ The symbol $\theta_t$ represents the total implied variance at-the-money (ATM) f
 - The 
 
 $$
-\begin{aligned}
+\begin{align}
 \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}
-\end{aligned}
+\end{align}
 $$
 term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
 
@@ -252,7 +252,12 @@ These ensure the surface is consistent **across maturities**, i.e., there's **no
 - **Why it matters:** Ensures the **overall steepness** of the volatility smile doesn't drop as maturity increases. Prevents arbitrage from crossing maturity slices.
 
 ##### 7. Slope continuity condition between maturities:
-$\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad \text{(when } \psi_{i+1} \ne \psi_i \text{)}$
+
+$$
+\begin{align}
+\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad \text{(when } \psi_{i+1} \ne \psi_i \text{)}
+$$
+\end{align}
 - **Type:** Calendar
 - **Why it matters:** Limits how quickly the slope of the smile (controlled by \( \rho \psi \)) can change between adjacent maturities. Sudden changes would imply **time arbitrage**, e.g., a butterfly that gains by switching maturities.
 
