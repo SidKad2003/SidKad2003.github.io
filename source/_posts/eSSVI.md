@@ -539,7 +539,13 @@ For me, the easiest way to understand what's happening was to **plot the paramet
   </iframe>
 </div>
 
-For me, the easiest way to understand what's happening was to **plot the parameter values as a function of** $t$ (time to expiry), in the form: $y = x \cdot m + c$
+I compared plots corresponding to different SLSQP exit modes:
+- **Exit 0** (successful convergence)
+- **Exit 4 and 8** (constraint or precision issues)
+
+**Observation:**
+The main issue originated from the **initialization of parameters**, particularly affecting how the gradients are explored during optimization.  
+As a result, I updated the `init_val` configuration, especially the slope parameters, to guide the solver more effectively through feasible paths.
 
 ---
 
