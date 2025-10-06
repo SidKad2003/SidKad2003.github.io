@@ -15,6 +15,16 @@ search:
       - post/2023*
     codeblock: true      # Include code blocks in search
 
+inject:
+  head:
+    - |
+      <style>
+        .article-footer {
+          display: none !important;
+        }
+      </style>
+
+
 menubar:
   columns: 4  # Number of items per row
   items:
