@@ -170,9 +170,9 @@ The symbol $\theta_t$ represents the total implied variance at-the-money (ATM) f
 - The 
 
 $$
-\begin{align}
+\begin{aligned}
 \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}
-\end{align}
+\end{aligned}
 $$
 term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
 
@@ -272,4 +272,10 @@ $$
 
 Together, these constraints form the **arbitrage-free foundation** of the eSSVI volatility surface. Ignoring even one can result in a model that fits market data but allows arbitrage — defeating its practical use in pricing and risk management.
 
-### 
+
+### Optimization and Forensic
+Now that the structure and intuition are clear, let’s look at what actually broke when I tried to implement this — and how I diagnosed and fixed each issue.
+
+
+
+
