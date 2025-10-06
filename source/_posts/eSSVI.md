@@ -80,37 +80,28 @@ Two correlated standard normal random variables $\( Z_S, Z_V \sim \mathcal{N}(0,
 
 Using **Euler discretization**:
 <div style="overflow-x: auto;">
-
-$$
+$
 \begin{aligned}
-S_{t+\Delta t} &= S_t + rS_t\Delta t + \sqrt{V_t}S_t\sqrt{\Delta t}Z_S \\ \\ \\ \\
+S_{t+\Delta t} &= S_t + rS_t\Delta t + \sqrt{V_t}S_t\sqrt{\Delta t}Z_S \\ 
 \end{aligned}
+$
+$
 \begin{aligned}
 V_{t+\Delta t} &= V_t + \kappa(\theta - V_t)\Delta t + \xi\sqrt{V_t}\sqrt{\Delta t}Z_V \\
 \text{with } \text{corr}(Z_S, Z_V) = \rho
 \end{aligned}
-$$
+$
 </div>
-Running this for many simulated paths (e.g., 10,000) gives a *distribution* of terminal prices $S_t$.  
-Each path is random, but the **statistical structure** across all paths reflects the model’s behavior.
 
+Running this for many simulated paths (e.g., 10,000) gives a **Distribution** of terminal prices $S_t$.  
+Each path is random, but the **Statistical Structure** across all paths reflects the model’s behavior.
 ### Step 2–4: Calibration and Comparison to Market
 
-For each path, compute the option payoff:
-
-$
-\begin{aligned}
-C_i = e^{-rT} \max(S_T^{(i)} - K, 0)
-\end{aligned}
-$
+For each path, compute the option payoff:$C_i = e^{-rT} \max(S_T^{(i)} - K, 0)$
 
 The model price is the expected value: $C_{\text{model}} = \frac{1}{M}\sum_{i=1}^{M} C_i$
 
-Calibration adjusts parameters $\((\kappa, \theta, \xi, \rho, V_0)\)$ to minimize the total squared error versus market option prices:
-
-$
-\min_{\text{params}} \sum_{i,j} \left[C_{\text{model}}(K_i, T_j) - C_{\text{mkt}}(K_i, T_j)\right]^2
-$
+Calibration adjusts parameters $\((\kappa, \theta, \xi, \rho, V_0)\)$ to minimize the total squared error versus market option prices:$\min_{\text{params}} \sum_{i,j} \left[C_{\text{model}}(K_i, T_j) - C_{\text{mkt}}(K_i, T_j)\right]^2$
 
 Typical optimizers include **BFGS**, **L-BFGS-B**, or global methods like **Differential Evolution**.
 
