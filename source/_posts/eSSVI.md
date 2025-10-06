@@ -273,6 +273,26 @@ $$
 
 Together, these constraints form the **arbitrage-free foundation** of the eSSVI volatility surface. Ignoring even one can result in a model that fits market data but allows arbitrage — defeating its practical use in pricing and risk management.
 
+This is implemented in `total_variance()`:
+
+```python
+def total_variance(self, x, tind, kind):
+    expiry = self._T[tind]
+    k_val = self._k[expiry][kind]
+    theta_val = self._theta[expiry]
+    rho, p1, p2 = self._compute_parameters(x, expiry)
+
+    if self._type == 'Heston':
+        lam = p1
+        x_val = lam * theta_val
+        phi = (1 - np.exp(-x_val)) / x_val if x_val > 1e-5 else 1 - x_val / 2
+    elif self._type == 'Power':
+        eta, gamma = p1, p2
+        phi = eta * (theta_val ** -gamma)
+
+    term = phi * k_val + rho
+    val = max(term**2 + (1 - rho**2), 1e-10)
+    return theta_val / 2 * (1 + rho * phi * k_val + np.sqrt(val))
 
 ## 2. Optimization and Forensic
 Now that the structure and intuition are clear, let’s look at what actually broke when I tried to implement this — and how I diagnosed and fixed each issue.
@@ -337,7 +357,7 @@ One effective method used for this is **Sequential Least Squares Quadratic Progr
 
 **SLSQP** is an iterative method for solving **nonlinear constrained optimization problems**. It is particularly useful when both the objective function and the constraints are nonlinear.
 
-##### 🎯 Problem Setup
+##### Problem Setup
 
 SLSQP solves problems of the following general form:
 
