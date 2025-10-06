@@ -37,7 +37,7 @@ The Heston model assumes that both the asset price and its variance evolve rando
 
 $$
 \begin{aligned}
-dS_t &= \mu S_t\,dt + \sqrt{V_t}\,S_t\,dW_t^S \\
+dS_t &= \mu S_t\,dt + \sqrt{V_t}\,S_t\,dW_t^S \\ 
 dV_t &= \kappa(\theta - V_t)\,dt + \xi\sqrt{V_t}\,dW_t^V \\
 dW_t^S\,dW_t^V &= \rho\,dt
 \end{aligned}
@@ -47,14 +47,14 @@ $$
 
 | Symbol | Meaning |
 |:--------|:--------|
-| \(S_t\) | Underlying asset price |
-| \(V_t\) | Instantaneous (stochastic) variance |
-| \(\mu\) | Drift of the asset price |
-| \(\kappa\) | Speed of mean reversion of variance |
-| \(\theta\) | Long-term mean of variance |
-| \(\xi\) | Volatility of volatility |
-| \(\rho\) | Correlation between the asset and variance processes |
-| \(dW_t^S, dW_t^V\) | Brownian motions driving randomness |
+| $$\(S_t\)$$ | Underlying asset price |
+| $$\(V_t\)$$ | Instantaneous (stochastic) variance |
+| $$\(\mu\)$$ | Drift of the asset price |
+| $$\(\kappa\)$$ | Speed of mean reversion of variance |
+| $$\(\theta\)$$ | Long-term mean of variance |
+| $$\(\xi\)$$ | Volatility of volatility |
+| $$\(\rho\)$$ | Correlation between the asset and variance processes |
+| $$\(dW_t^S, dW_t^V\)$$ | Brownian motions driving randomness |
 
 ### Key Idea
 
