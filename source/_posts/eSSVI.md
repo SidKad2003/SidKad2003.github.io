@@ -13,7 +13,7 @@ color: ''
 sticky: 0
 mermaid: false
 katex: false
-mathjax: false
+mathjax: True
 column: ''
 author: ''
 references: ''
@@ -24,6 +24,8 @@ h1: 'eSSVI: A Forensic Approach To Modelling Implied Volatilty'
 type: tech
 date: 2025-10-03 16:29:09
 ---
+# Introduction
+
 ## 1. Stochastic Processes and the Heston Model
 
 A **stochastic process** is a collection of random variables representing the evolution of a system over time under uncertainty.  
