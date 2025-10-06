@@ -20,7 +20,7 @@ references: ''
 comments: true
 indexing: true
 breadcrumb: true
-h1: 'eSSVI: a forensic approach to modelling Implied Volatilty'
+h1: 'eSSVI: A Forensic Approach To Modelling Implied Volatilty'
 type: tech
 date: 2025-10-03 16:29:09
 ---
