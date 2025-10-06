@@ -152,91 +152,65 @@ $$
 | $$ \varphi_t $$ | **Slope control parameter** at maturity $t$. It governs the steepness of the volatility smile (w.r.t. $k$). |
 | $$\rho_t$$ | **Skewness parameter** at maturity $t$. It controls asymmetry (skew) of the smile. Ranges between $-1$ and $1$. |
 
-#### 🧩 Interpretation:
+<!-- #### 🧩 Interpretation:
 
 - The term $\rho_t \varphi_t k$ adds **linear skew**.
 - The square root term introduces **curvature**, ensuring a smooth and arbitrage-free shape.
 - The overall structure ensures that **smiles and skews** observed in market implied volatilities can be fit accurately and consistently over strikes and maturities.
+- Since, eSSVI (along SVI and SSVI) is a parameteric model, each of  $\rho_t$ and $\varphi_t$ capture assigned characteristics. -->
+
+### 🧾 Role of Each Symbol in the eSSVI Model
+
+#### θₜ — ATM Total Variance
+
+The symbol $\theta_t$ represents the total implied variance at-the-money (ATM) for a given maturity $t$. This is usually computed as:$\theta_t = \sigma_{\text{ATM}}^2 \cdot t$
+
+- This parameter serves as the **vertical anchor** for the volatility surface. It reflects the market's consensus on average volatility over the period $[0, t]$, and is typically the most stable and liquid point in the volatility surface. Since it comes directly from market data, no fitting is required for $\theta_t$.
 - The ATM total implied variance θ is considered one of the most stable, liquid, and reliable quotes in the options market. Both SSVI and eSSVI "anchor" their volatility smile parameterizations to exactly match the ATM variance, because this reduces model fit uncertainty and noise. Each maturity slice is characterized first by its ATM variance, then by additional parameters to capture skew/curvature. This anchoring ensures the smile passes through the most trusted market point, minimizing extrapolation error at-the-money.
 - The $\frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}$ term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
-- Since, eSSVI (along SVI and SSVI) is a parameteric model, each of  $\rho_t$ and $\varphi_t$ capture assigned characteristics.
-
-## 🧾 Role of Each Symbol in the eSSVI Model
-
-### θₜ — ATM Total Variance
-
-The symbol \( \theta_t \) represents the total implied variance at-the-money (ATM) for a given maturity \( t \). This is usually computed as:
-
-\[
-\theta_t = \sigma_{\text{ATM}}^2 \cdot t
-\]
-
-This parameter serves as the **vertical anchor** for the volatility surface. It reflects the market's consensus on average volatility over the period \( [0, t] \), and is typically the most stable and liquid point in the volatility surface. Since it comes directly from market data, no fitting is required for \( \theta_t \).
 
 ---
 
-### k — Log-Moneyness
+#### k — Log-Moneyness
 
-Log-moneyness \( k \) is defined as:
+Log-moneyness $k$ is defined as:$k = \log\left(\frac{K}{F_t}\right)$ where $K$ is the strike price and $F_t$ is the forward price at maturity$t$, computed as:$F_t = S_0 e^{rt}$
 
-\[
-k = \log\left(\frac{K}{F_t}\right)
-\]
-
-where \( K \) is the strike price and \( F_t \) is the forward price at maturity \( t \), computed as:
-
-\[
-F_t = S_0 e^{rt}
-\]
-
-Using \( k \) instead of raw strike removes scale effects and normalizes the surface across maturities. It allows the model to operate on a consistent, dimensionless domain regardless of the underlying asset's level.
+- Using $k$ instead of raw strike removes scale effects and normalizes the surface across maturities. It allows the model to operate on a consistent, dimensionless domain regardless of the underlying asset's level.
 
 ---
 
-### ρₜ — Skew Parameter
+#### ρₜ — Skew Parameter
 
-The skew parameter \( \rho_t \) controls the **asymmetry** of the implied volatility smile. When:
+The skew parameter $\rho_t$ controls the **asymmetry** of the implied volatility smile. When:
 
-- \( \rho_t < 0 \): the smile has **left skew** (higher vol for OTM puts)
-- \( \rho_t > 0 \): the smile has **right skew** (higher vol for OTM calls)
+- $\rho_t < 0$: the smile has **left skew** (higher vol for OTM puts)
+- $\rho_t > 0$: the smile has **right skew** (higher vol for OTM calls)
 
-This parameter is commonly modeled as a **linear function of time**:
-
-\[
-\rho_t = A_\rho t + B_\rho
-\]
-
-This allows the skew to evolve smoothly with maturity. It must satisfy \( |\rho_t| < 1 \) to ensure the model remains arbitrage-free.
+This parameter is commonly modeled as a **linear function of time**:$\rho_t = A_\rho t + B_\rho$ .This allows the skew to evolve smoothly with maturity. It must satisfy $|\rho_t| < 1$ to ensure the model remains arbitrage-free.
 
 ---
 
-### φₜ — Curvature / Scale Parameter
+#### φₜ — Curvature / Scale Parameter
 
-The curvature parameter \( \varphi_t \) determines the **steepness** and **curvature** of the volatility smile beyond the ATM point. It is not directly calibrated, but is computed from:
+The curvature parameter $\varphi_t$ determines the **steepness** and **curvature** of the volatility smile beyond the ATM point. 
+- It is not directly calibrated, but is computed from:$\varphi_t = \eta \cdot (\rho_t)^{-\gamma}$. 
+- Here, \( \eta \) and \( \gamma \) are themselves modeled as **linear functions of time**: $\eta = A_\eta t + B_\eta, \quad \gamma = A_\gamma t + B_\gamma$
 
-\[
-\varphi_t = \eta \cdot (\rho_t)^{-\gamma}
-\]
-
-Here, \( \eta \) and \( \gamma \) are themselves modeled as **linear functions of time**:
-
-\[
-\eta = A_\eta t + B_\eta, \quad \gamma = A_\gamma t + B_\gamma
-\]
-
-This form provides the flexibility to shape the smile appropriately across maturities. The combination of \( \rho_t \) and \( \varphi_t \) enables the model to reproduce both the skew and the smile seen in market data.
+This form provides the flexibility to shape the smile appropriately across maturities. The combination of $\rho_t$ and $\varphi_t$ enables the model to reproduce both the skew and the smile seen in market data.
 
 ---
 
-## 🧠 Intuition: Transforming ATM Variance Across Strikes and Time
+### Intuition: Transforming ATM Variance Across Strikes and Time
 
-The full eSSVI formula adjusts the ATM total variance \( \theta_t \) into a surface that varies with strike (via \( k \)):
+The full eSSVI formula adjusts the ATM total variance $\theta_t$ into a surface that varies with strike (via $k$):
 
-\[
+$$
+\begin{align}
 w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}
-\]
+\end{align}
+$$
 
-- The **linear term** \( \rho_t \varphi_t k \) introduces asymmetry.
+- The **linear term** $\rho_t \varphi_t k$ introduces asymmetry.
 - The **square root term** introduces smooth curvature, ensuring the surface bends around ATM.
 
 Together, they produce a total variance surface that:
@@ -245,7 +219,6 @@ Together, they produce a total variance surface that:
 - Evolves smoothly with both strike and maturity.
 
 This structure is why eSSVI is widely used for **volatility surface calibration**: it's flexible, interpretable, and can be constrained to remain arbitrage-free with the right parameter settings.
-
 
 This is what makes eSSVI powerful: it provides a flexible yet arbitrage-free **parametrization** of the implied volatility surface.
 
