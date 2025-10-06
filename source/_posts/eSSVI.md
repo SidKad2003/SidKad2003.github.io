@@ -260,6 +260,7 @@ $$
 \end{aligned}
 $$
 </div>
+
 - **Type:** Calendar
 - **Why it matters:** Limits how quickly the slope of the smile (controlled by \( \rho \psi \)) can change between adjacent maturities. Sudden changes would imply **time arbitrage**, e.g., a butterfly that gains by switching maturities.
 
@@ -273,8 +274,54 @@ $$
 Together, these constraints form the **arbitrage-free foundation** of the eSSVI volatility surface. Ignoring even one can result in a model that fits market data but allows arbitrage — defeating its practical use in pricing and risk management.
 
 
-### Optimization and Forensic
+## 2. Optimization and Forensic
 Now that the structure and intuition are clear, let’s look at what actually broke when I tried to implement this — and how I diagnosed and fixed each issue.
+
+
+### What Kind of Optimization Problem Is eSSVI Calibration?
+
+Calibrating eSSVI isn’t just curve fitting — it creates a **nonlinear, constrained, nonconvex optimization problem**. Let’s briefly unpack what each of these terms means in this context.
+
+---
+
+#### 1. Nonlinear
+
+- The eSSVI formula involves **products, powers, and square roots**:
+  
+  $$
+  \begin{aligned}
+  w(k, t) = \frac{\theta_t}{2} \left(1 + \rho_t \varphi_t k + \sqrt{(\varphi_t k + \rho_t)^2 + 1 - \rho_t^2} \right)
+  \end{aligned}
+  $$
+- Calibration minimizes the difference between **model and market total variances**, making the objective **nonlinear** in parameters. Both the model and loss function are nonlinear.
+
+---
+
+#### 2. Constrained
+
+- **Butterfly constraints:** Ensure the smile is convex (e.g., $\eta(1 + |\rho|) < 2 $).
+- **Calendar constraints:** Enforce increasing ATM variance and smooth skew behavior across maturities.
+- **Bounds:** Parameters like $-1 < \rho_t < 1$, $\varphi_t > 0$ must be enforced. Optimization must respect both hard bounds and arbitrage-free inequalities.
+
+---
+
+#### 3. Nonconvex
+
+- Due to nonlinear interactions and curved constraint regions, the **objective landscape has multiple minima**.
+- Optimizers may get stuck depending on initialization. This is a nonconvex problem — no guarantee of finding the global optimum.
+
+---
+
+#### Why It’s Hard in Practice
+
+- **Nonlinearity** makes gradients unpredictable and sensitive.
+- **Constraints** limit the search space — you’re optimizing inside a narrow legal region.
+- **Nonconvexity** means many traps: local minima that aren’t good enough.
+- **Solver issues:** Common errors (like SLSQP’s *exit mode 8*) often occur near boundary violations or in flat regions.
+
+---
+### How to solve such problem?
+
 
 
 
