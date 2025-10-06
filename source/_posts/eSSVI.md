@@ -35,7 +35,6 @@ In finance, such processes are used to model the **random behavior of asset pric
 
 The Heston model assumes that both the asset price and its variance evolve randomly over time, driven by correlated Brownian motions.
 <div style="overflow-x: auto;">
-
 $$
 \begin{aligned}
 dS_t &= \mu S_tdt + \sqrt{V_t}S_tdW_t^S ,\\ 
@@ -80,15 +79,16 @@ Time is discretized into small intervals (e.g., 252 trading days in a year).
 Two correlated standard normal random variables $\( Z_S, Z_V \sim \mathcal{N}(0,1) \)$ are generated with correlation $\( \rho \)$.
 
 Using **Euler discretization**:
+<div style="overflow-x: auto;">
 
 $$
 \begin{aligned}
-S_{t+\Delta t} &= S_t + rS_t\Delta t + \sqrt{V_t}S_t\sqrt{\Delta t}Z_S \\
+S_{t+\Delta t} &= S_t + rS_t\Delta t + \sqrt{V_t}S_t\sqrt{\Delta t}Z_S \\ \\ \\ \\
 V_{t+\Delta t} &= V_t + \kappa(\theta - V_t)\Delta t + \xi\sqrt{V_t}\sqrt{\Delta t}Z_V \\
 \text{with } \text{corr}(Z_S, Z_V) = \rho
 \end{aligned}
 $$
-
+</div>
 Running this for many simulated paths (e.g., 10,000) gives a *distribution* of terminal prices $\( S_T \)$.  
 Each path is random, but the **statistical structure** across all paths reflects the model’s behavior.
 
