@@ -529,11 +529,13 @@ After several rounds of diagnostics, I focused primarily on **Exit Mode 4**, sin
 ---
 #### `Exit Mode 4`: Constraints Incompatible or Cannot be Satisfied
 For me, the easiest way to understand what's happening was to **plot the parameter values as a function of** $t$ (time to expiry), in the form: $y = x \cdot m + c$
-
-<div style="position: relative; width: 100%; padding-top: 50%;">
+% <iframe 
+%     src="https://dashessvi-db4kvxfoh-sidkad2003s-projects.vercel.app/plot" width: 100%; height: 90%;  frameborder="0"  allowfullscreen>
+%   </iframe>
+<div style="position: relative; width: 100%;height: 90%; padding-top: 50%;">
   <iframe 
     src="https://dashessvi-db4kvxfoh-sidkad2003s-projects.vercel.app/plot" 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 90%;" 
     frameborder="0" 
     allowfullscreen>
   </iframe>
