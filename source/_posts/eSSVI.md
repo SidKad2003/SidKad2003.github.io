@@ -37,10 +37,10 @@ The Heston model assumes that both the asset price and its variance evolve rando
 
 $$
 \begin{aligned}
-dS_t &= \mu S_tdt + \sqrt{V_t}S_tdW_t^S \\ 
+dS_t &= \mu S_tdt + \sqrt{V_t}S_tdW_t^S ,\\ 
 \end{aligned}
 \begin{aligned}
-dV_t &= \kappa(\theta - V_t)dt + \xi\sqrt{V_t}dW_t^V \\
+dV_t &= \kappa(\theta - V_t)dt + \xi\sqrt{V_t}dW_t^V ,\\
 \end{aligned}
 \begin{aligned}
 dW_t^SdW_t^V &= \rho dt
@@ -62,7 +62,7 @@ $$
 
 ### Key Idea
 
-The asset price \(S_t\) evolves under **random shocks**, influenced by both its own dynamics and a **stochastic variance** \(V_t\).  
+The asset price $$\(S_t\)$$ evolves under **random shocks**, influenced by both its own dynamics and a **stochastic variance** $$\(V_t\)$$.  
 This dual randomness captures features observed in real markets — most notably **volatility smiles and skews** in implied volatility surfaces derived from option prices.
 
 
