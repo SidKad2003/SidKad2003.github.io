@@ -528,6 +528,7 @@ After several rounds of diagnostics, I focused primarily on **Exit Mode 4**, sin
 
 ---
 #### `Exit Mode 4`: Constraints Incompatible or Cannot be Satisfied
+For me, the easiest way to understand what's happening was to **plot the parameter values as a function of** $t$ (time to expiry), in the form: $Y = X \cdot M + C$
 
 
 ---
