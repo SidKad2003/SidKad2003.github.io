@@ -168,10 +168,11 @@ The symbol $\theta_t$ represents the total implied variance at-the-money (ATM) f
 - This parameter serves as the **vertical anchor** for the volatility surface. It reflects the market's consensus on average volatility over the period $[0, t]$, and is typically the most stable and liquid point in the volatility surface. Since it comes directly from market data, no fitting is required for $\theta_t$.
 - The ATM total implied variance θ is considered one of the most stable, liquid, and reliable quotes in the options market. Both SSVI and eSSVI **Anchor** their volatility smile parameterizations to exactly match the ATM variance, because this reduces model fit uncertainty and noise. Each maturity slice is characterized first by its ATM variance, then by additional parameters to capture skew/curvature. This anchoring ensures the smile passes through the most trusted market point, minimizing extrapolation error at-the-money.
 - The 
+
 $$
-\begin{align}
+\begin{aligned}
 \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}$$
-\end{align}
+\end{aligned}
 $$
 term transform the ATM variance as a funtion of **Log Moneyness** and **Time till Expiry**.
 
