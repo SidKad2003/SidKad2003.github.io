@@ -54,9 +54,9 @@ $$
 
 | Symbol | Meaning |
 |:--------|:--------|
-| $$\(S_t\)$$ | Underlying asset price |
-| $$\(V_t\)$$ | Instantaneous (stochastic) variance |
-| $$\(\mu\)$$ | Drift of the asset price |
+| $S_t$ | Underlying asset price |
+| $V_t$ | Instantaneous (stochastic) variance |
+| $\mu$$ | Drift of the asset price |
 | $$\(\kappa\)$$ | Speed of mean reversion of variance |
 | $$\(\theta\)$$ | Long-term mean of variance |
 | $$\(\xi\)$$ | Volatility of volatility |
