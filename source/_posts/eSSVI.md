@@ -38,7 +38,15 @@ The Heston model assumes that both the asset price and its variance evolve rando
 $$
 \begin{aligned}
 dS_t &= \mu S_t\,dt + \sqrt{V_t}\,S_t\,dW_t^S \\ 
+\end{aligned}
+$$
+$$
+\begin{aligned}
 dV_t &= \kappa(\theta - V_t)\,dt + \xi\sqrt{V_t}\,dW_t^V \\
+\end{aligned}
+$$
+$$
+\begin{aligned}
 dW_t^S\,dW_t^V &= \rho\,dt
 \end{aligned}
 $$
