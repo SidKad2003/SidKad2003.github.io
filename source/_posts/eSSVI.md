@@ -34,6 +34,7 @@ In finance, such processes are used to model the **random behavior of asset pric
 ### Example: The Heston Stochastic Volatility Model
 
 The Heston model assumes that both the asset price and its variance evolve randomly over time, driven by correlated Brownian motions.
+<div style="overflow-x: auto;">
 
 $$
 \begin{aligned}
@@ -48,6 +49,7 @@ $$
 dW_t^SdW_t^V &= \rho dt
 \end{aligned}
 $$
+</div>
 
 ### Explanation of Terms
 
