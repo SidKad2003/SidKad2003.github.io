@@ -25,8 +25,8 @@ type: tech
 date: 2025-10-03 16:29:09
 ---
 # Introduction
+In this post, I take a forensic approach to implementing eSSVI — documenting the errors I encountered and how I diagnosed and resolved them.
 # Stochastic and Stochastic Volatility Inspired
-
 ## 1. Stochastic Processes and the Heston Model
 
 A **stochastic process** is a collection of random variables representing the evolution of a system over time under uncertainty.  
@@ -124,5 +124,31 @@ As a result the Heston model helped researchers understand phenomena such as ske
 
 Based on the understanding from such stochastic volatility models, researchers developed parametric models like SVI and later eSSVI to directly parametrize and fit the observed implied volatility surface. These models make calibration more efficient and ensure no-arbitrage constraints while preserving the realistic shapes (smile, skew, term structure) originally explored by models such as Heston. Thus, SSVI and eSSVI was built as a natural evolution to efficiently capture the structure that stochastic volatility models helped uncover.
 # 3. eSSVI
+## Understanding the eSSVI Parametrization
+
+The eSSVI model defines the **implied total variance** surface \( w(k, t) \), which is the squared implied volatility multiplied by maturity. Its formulation is:
+
+$$
+w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\}
+$$
+
+### What Each Symbol Means:
+
+| Symbol | Meaning |
+|--------|---------|
+| $$w(k, t)$$ | Total implied variance at log-moneyness $k$ and maturity $t$. This is  $\sigma_{\text{BS}}^2(k, t) \cdot t$, where $\sigma_{\text{BS}}$ is Black-Scholes implied volatility. |
+| $$k$$ | **Log-moneyness**, defined as $\log(K/F_t)$, where $K$ is strike and $F_t$ is forward price at maturity  $t$. |
+| $$t$$ | **Time to maturity** (in years). |
+| $$\theta_t$$ | **ATM total variance** at maturity $t$, i.e., $\sigma_{\text{ATM}}^2(t) \cdot t $. This anchors the surface at-the-money. |
+| $$ \varphi_t $$ | **Slope control parameter** at maturity $t$. It governs the steepness of the volatility smile (w.r.t. $k$). |
+| $$\rho_t$$ | **Skewness parameter** at maturity $t$. It controls asymmetry (skew) of the smile. Ranges between $-1$ and $1$. |
+
+#### 🧩 Interpretation:
+
+- The term $\rho_t \varphi_t k$ adds **linear skew**.
+- The square root term introduces **curvature**, ensuring a smooth and arbitrage-free shape.
+- The overall structure ensures that **smiles and skews** observed in market implied volatilities can be fit accurately and consistently over strikes and maturities.
+
+This is what makes eSSVI powerful: it provides a flexible yet arbitrage-free **parametrization** of the implied volatility surface.
 
 ### 
