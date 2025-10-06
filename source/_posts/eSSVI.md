@@ -180,7 +180,7 @@ term transform the ATM variance as a funtion of **Log Moneyness** and **Time til
 
 #### k: Log-Moneyness
 
-Log-moneyness $k$ is defined as: $k = \log\left(\frac{K}{F_t}\right)$ where $k$ is the strike price and $F_t$ is the forward price at maturity $t$, computed as: $F_t = S_0 -e^{rt}$
+Log-moneyness $k$ is defined as: $k = \log\left(\frac{K}{F_t}\right)$ where $k$ is the strike price and $F_t$ is the forward price at maturity $t$, computed as: $F_t = S_0 e^{-rt}$
 
 - Using $k$ instead of raw strike removes scale effects and normalizes the surface across maturities. It allows the model to operate on a consistent, dimensionless domain regardless of the underlying asset's level.
 
