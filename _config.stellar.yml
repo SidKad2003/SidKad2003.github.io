@@ -63,7 +63,6 @@ footer:
     comments:
       icon: '<img src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder/social/942ebbf1a4b91.svg"/>'
       url: https://example.com/comments
-footer: content: |     <span id="busuanzi_container_site_pv">Total visits to this site<span id="busuanzi_value_site_pv"></span> times</span>     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-   
-
-
+footer:
+  since: 2020
+  custom_text: "Powered by Hexo & Stellar"
