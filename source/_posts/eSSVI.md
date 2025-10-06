@@ -215,54 +215,48 @@ This form provides the flexibility to shape the smile appropriately across matur
 ---
 #### Arbitrage Constraints
 
-
-
 These constraints ensure the **convexity of the total variance smile** for each maturity slice — i.e., **no butterfly arbitrage**. Derived from the work of Gatheral & Jacquier, they apply per maturity:
 
-#### 1. \( 1 - |\rho| - 1 \times 10^{-5} > 0 \)
+##### 1. $1 - |\rho| - 1 \times 10^{-5} > 0$
 - **Type:** Butterfly
-- **Meaning:** \( \rho \in (-1, 1) \)
+- **Meaning:** $\rho \in (-1, 1)$
 - **Why it matters:** Keeps the square root in the SVI formula real and ensures skew doesn't lead to a non-convex smile.
 
-#### 2. \( \eta - 1 \times 10^{-5} > 0 \)
+##### 2. $\eta - 1 \times 10^{-5} > 0$
 - **Type:** Butterfly
-- **Meaning:** \( \eta > 0 \)
+- **Meaning:** $\eta > 0$
 - **Why it matters:** Ensures the curvature parameter is positive, giving the smile its shape. Negative curvature would flip the smile, creating arbitrage.
 
-#### 3. \( 0.5 - |\gamma - 0.5| > 0 \)
+##### 3. $0.5 - |\gamma - 0.5| > 0$
 - **Type:** Butterfly
-- **Meaning:** \( \gamma \in (0, 1) \) — commonly constrained tighter to \( (0, 0.5] \)
-- **Why it matters:** Controls how the curvature scales with maturity. If \( \gamma \notin (0,1) \), the surface becomes unstable or ill-formed.
+- **Meaning:** $\gamma \in (0, 1)$ — commonly constrained tighter to $(0, 0.5]$
+- **Why it matters:** Controls how the curvature scales with maturity. If $\gamma \notin (0,1)$, the surface becomes unstable or ill-formed.
 
-#### 4. \( 2 - \eta (1 + |\rho|) > 0 \)
+##### 4. $2 - \eta (1 + |\rho|) > 0$
 - **Type:** Butterfly
-- **Meaning:** \( \eta (1 + |\rho|) < 2 \)
+- **Meaning:** $\eta (1 + |\rho|) < 2$
 - **Why it matters:** Known as the **Gatheral–Jacquier upper bound** — it prevents the total variance from becoming too steep in the wings, which would violate convexity.
 
 ---
 
-### ⏳ Calendar Spread Arbitrage Constraints (Across Time)
+#### Calendar Spread Arbitrage Constraints (Across Time)
 
 These ensure the surface is consistent **across maturities**, i.e., there's **no calendar spread arbitrage**.
 
-#### 5. \( \theta_{t} \) must be strictly increasing in \( t \)
+##### 5. $\theta_{t}$ must be strictly increasing in $t$
 - **Type:** Calendar
 - **Why it matters:** The ATM total variance should grow with maturity — declining variance implies the market expects less uncertainty further out, which contradicts financial intuition.
 
-#### 6. \( \psi(\theta_t) = \eta \theta_t^\gamma \) must be non-decreasing in \( t \)
+##### 6. $\psi(\theta_t) = \eta \theta_t^\gamma$ must be non-decreasing in $t$
 - **Type:** Calendar
 - **Why it matters:** Ensures the **overall steepness** of the volatility smile doesn't drop as maturity increases. Prevents arbitrage from crossing maturity slices.
 
-#### 7. Slope continuity condition between maturities:
-\[
-\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad \text{(when } \psi_{i+1} \ne \psi_i \text{)}
-\]
+##### 7. Slope continuity condition between maturities:
+$\left| \frac{\rho_{i+1} \psi_{i+1} - \rho_i \psi_i}{\psi_{i+1} - \psi_i} \right| \leq 1 \quad \text{(when } \psi_{i+1} \ne \psi_i \text{)}$
 - **Type:** Calendar
 - **Why it matters:** Limits how quickly the slope of the smile (controlled by \( \rho \psi \)) can change between adjacent maturities. Sudden changes would imply **time arbitrage**, e.g., a butterfly that gains by switching maturities.
 
 ---
-
-### Summary
 
 | Constraint Type | Purpose |
 |-----------------|---------|
