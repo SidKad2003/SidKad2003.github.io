@@ -434,7 +434,12 @@ At each iteration $k$, SLSQP solves a **Quadratic Programming (QP)** subproblem 
 
 #### QP Subproblem: Approximated Objective
 
-A **quadratic model of the Lagrangian** is used: $\min_{d \in \mathbb{R}^n} \quad \frac{1}{2} d^T B_k d + \nabla f(x_k)^T d$
+A **quadratic model of the Lagrangian** is used: 
+$$
+\begin{aligned}
+\min_{d \in \mathbb{R}^n} \quad \frac{1}{2} d^T B_k d + \nabla f(x_k)^T d
+\end{aligned}
+$$
 
 Where:
 - $d$ is the search direction.
@@ -499,6 +504,35 @@ def calibrate(self):
     self._x = res.x
     return res.x
     ```
+### Forensics
+
+## 5. eSSVI Optimization: Failures, Forensics, and Fixes
+
+Once the eSSVI parametrization was in place, the real challenge began — **making it fit actual market data**.  
+On paper, the model is elegant: a smooth, arbitrage-free surface defined by just a few interpretable parameters.  
+In practice, however, the optimization turned out to be far less forgiving.
+
+Even with careful use of optimizers like **SLSQP** and **Differential Evolution**, the solver frequently terminated in unexpected ways — producing high objective values, runtime warnings, or cryptic exit codes like *4*, *5*, and *8*.  
+Each of these failure modes turned out to reveal something deeper: about the **mathematical landscape** of eSSVI, the **fragility of its numerical implementation**, and the **sensitivity of the calibration problem** itself.
+
+The table below summarizes the primary errors I encountered and what they revealed about the model:
+
+| Exit Mode / Error | Root Cause | Insight |
+|:------------------|:------------|:---------|
+| **8 – Positive Directional Derivative** | Flat or ill-conditioned objective; poor initialization; parameter overflow | The optimizer couldn’t find a descent direction — a symptom of eSSVI’s rugged, non-convex loss surface. |
+| **5 – Singular Matrix in LSQ** | Numerical breakdown when $\rho > 1$ caused invalid $\sqrt{1 - \rho^2}$ terms | Even a small domain violation poisons the Hessian, showing how sensitive eSSVI is to boundary conditions. |
+| **4 – Constraints incompatible or cannot be satisfied** | Theoretical arbitrage condition $\eta(1 + |\rho|) \le 2$ became infeasible | Revealed how eSSVI’s feasible region is non-convex and tightly coupled across parameters. |
+| **Runtime Warnings** | Overflow in $\phi k + \rho$ or invalid $\sqrt{\cdot}$ terms | Signaled numerical instability and the need for clamping and tighter parameter bounds. |
+| **High Objective Values (~10⁶)** | Arbitrary initialization, exploding terms in $\phi = \eta \theta^{-\gamma}$ | Highlighted poor global convergence and the importance of structured initialization. |
+| **Gradient Ineffectiveness** | Autograd provided gradients, but they didn’t improve convergence | Gradient quality couldn’t overcome non-convexity or constraint infeasibility. |
+
+After several rounds of diagnostics, I focused primarily on **Exit Mode 4**, since it pointed to a deeper issue — *the solution itself was infeasible under eSSVI’s theoretical constraints*.  
+To address this, I refined the constraint handling, redefined initial starting points, and introduced an interpolation scheme ensuring $\theta_i > \theta_{i-1}$ for stable surface progression.
+
+#### `Exit Mode 4`: Constraints Incompatible or Cannot be Satisfied
+---
+
+
 
 ---
 
