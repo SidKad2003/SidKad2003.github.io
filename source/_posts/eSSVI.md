@@ -91,7 +91,7 @@ V_{t+\Delta t} &= V_t + \kappa(\theta - V_t)\Delta t + \xi\sqrt{V_t}\sqrt{\Delta
 \end{aligned}
 $$
 </div>
-Running this for many simulated paths (e.g., 10,000) gives a *distribution* of terminal prices $\(S_T\)$.  
+Running this for many simulated paths (e.g., 10,000) gives a *distribution* of terminal prices $\(S_T\)$ $\(S_t\)$.  
 Each path is random, but the **statistical structure** across all paths reflects the model’s behavior.
 
 ### Step 2–4: Calibration and Comparison to Market
@@ -99,7 +99,7 @@ Each path is random, but the **statistical structure** across all paths reflects
 For each path, compute the option payoff:
 
 $
-\end{aligned}
+\begin{aligned}
 C_i = e^{-rT} \max(S_T^{(i)} - K, 0)
 \end{aligned}
 $
