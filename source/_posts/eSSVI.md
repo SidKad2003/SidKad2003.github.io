@@ -132,14 +132,13 @@ This is where theory meets reality.
 ## Understanding the eSSVI Parametrization
 
 The eSSVI model defines the **implied total variance** surface \( w(k, t) \), which is the squared implied volatility multiplied by maturity. Its formulation is:
-<div style="overflow-x: auto;">
 
+<div style="overflow-x: auto;">
 $$
 \begin{aligned}
 w(k, t) = \frac{\theta_t}{2} \left\{ 1 + \rho_t \varphi_t k + \sqrt{ (\varphi_t k + \rho_t)^2 + (1 - \rho_t^2) } \right\} 
 \end{aligned}
 $$
-
 </div>
 
 ### What Each Symbol Means
