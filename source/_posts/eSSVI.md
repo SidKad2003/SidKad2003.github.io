@@ -532,8 +532,7 @@ For me, the easiest way to understand what's happening was to **plot the paramet
 
 <div style="position: relative; width: 100%;height: 90%; padding-top: 50%;">
   <iframe 
-    src="https://dashessvi-db4kvxfoh-sidkad2003s-projects.vercel.app/plot" 
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 90%;" 
+    src="https://dashessvi-db4kvxfoh-sidkad2003s-projects.vercel.app/plot"  
     frameborder="0" 
     allowfullscreen>
   </iframe>
