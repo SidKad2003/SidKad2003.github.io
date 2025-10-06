@@ -398,7 +398,6 @@ One effective method used for this is **Sequential Least Squares Quadratic Progr
 
 SLSQP solves problems of the following general form:
 
-<div style="overflow-x: auto;">
 $$
 \begin{aligned}
 \min_{x \in \mathbb{R}^n} &\quad f(x) \\\\
@@ -406,7 +405,6 @@ $$
 &\quad h_k(x) \geq 0, \quad k = 1, \dots, m_i
 \end{aligned}
 $$
-<\div>
 
 Where:
 - $f(x)$ is the **nonlinear objective function** to minimize.
@@ -428,8 +426,6 @@ def objective_function(self, x):
             sm += weight * (model_var - market_var) ** 2
     return sm
 ```
-
-
 ---
 
 ##### Core Idea
@@ -438,7 +434,7 @@ At each iteration $k$, SLSQP solves a **Quadratic Programming (QP)** subproblem 
 
 #### QP Subproblem: Approximated Objective
 
-A **quadratic model of the Lagrangian** is used:$\min_{d \in \mathbb{R}^n} \quad \frac{1}{2} d^T B_k d + \nabla f(x_k)^T d$
+A **quadratic model of the Lagrangian** is used: $\min_{d \in \mathbb{R}^n} \quad \frac{1}{2} d^T B_k d + \nabla f(x_k)^T d$
 
 Where:
 - $d$ is the search direction.
@@ -448,7 +444,6 @@ Where:
 ##### Linearized Constraints
 
 Constraints are linearized around the current point:
-<div style="overflow-x: auto;">
 
 $$
 \begin{aligned}
@@ -456,12 +451,11 @@ $$
 \nabla h_k(x_k)^T d + h_k(x_k) &\geq 0, \quad k = 1, \dots, m_i
 \end{aligned}
 $$
-<\div>
 This converts the nonlinear constraints into a **local linear approximation**, making the QP solvable at each iteration.
 
 ##### Update Step
 
-Once the direction $d_k$ is found, the solution is updated:$x_{k+1} = x_k + \alpha_k d_k$
+Once the direction $d_k$ is found, the solution is updated: $x_{k+1} = x_k + \alpha_k d_k$
 
 Where $\alpha_k \in (0, 1]$ is chosen via a **line search** to ensure:
 - Feasibility is preserved,
@@ -482,6 +476,29 @@ Lagrange multipliers (dual variables) are updated using the QP solution.
   - **Feasibility** (satisfying constraints),
   - **Optimality** (minimizing the objective),
   - Using **merit functions and line search** to avoid divergence.
+
+Finally, the Optimization loop is implemented in `Calibrate()` as follows:
+```python
+def calibrate(self):
+    if self._type == 'Heston':
+        init_val = [0.0, 0.0, 1.0, 0.0]
+        cons_func = self._heston_constraints
+    elif self._type == 'Power':
+        init_val = [1.0, -0.05, 0.0, 0.1, 0.0, 0.14]
+        cons_func = self._power_constraints
+
+    res = minimize(
+        self.objective_function,
+        init_val,
+        constraints={'type': 'ineq', 'fun': self.cons},
+        bounds=self.param_bounds,
+        method='SLSQP',
+        options={'disp': True, 'maxiter': 220, 'ftol': 1e-8},
+        callback=self.callback
+    )
+    self._x = res.x
+    return res.x
+    ```
 
 ---
 
