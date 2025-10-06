@@ -117,7 +117,12 @@ Once calibrated, the model can be used to simulate new price distributions and c
 - Confidence intervals (e.g., 5%–95% quantiles of $S_T$)  
 - Risk metrics like VaR and Greeks  
 
-This process doesn’t predict exact future prices — it predicts the **distributional pattern** of randomness consistent with market-implied volatility.
+Hence, this process doesn’t predict exact future prices — it predicts the **distributional pattern** of randomness consistent with market-implied volatility.
 
+## 3. SVI, SSVI and eSSVI
 
+The Heston model helped researchers understand phenomena such as skew, smile, and the term structure of implied volatility by providing a stochastic volatility framework that explains these features more realistically than simpler models like Black-Scholes. It was among the first models able to capture these effects with a semi-analytical solution, making it useful for practical implementation.
 
+Based on the understanding from such stochastic volatility models, researchers developed parametric models like SVI and later eSSVI to directly parametrize and fit the observed implied volatility surface. These models make calibration more efficient and ensure no-arbitrage constraints while preserving the realistic shapes (smile, skew, term structure) originally explored by models such as Heston. Thus, SSVI was built as a natural evolution to efficiently capture the structure that stochastic volatility models helped uncover.
+
+### 
